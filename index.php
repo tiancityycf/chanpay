@@ -1,10 +1,20 @@
 <?php
 index();
+/*
+ * 功能： 畅捷支付  收银台
+ * 官方说明： http://dev.chanpay.com/doku.php/sdwg:%E6%94%B6%E5%8D%95%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3#%E6%95%B0%E6%8D%AE%E
+ 4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E
+ **************************************************************
+ * author:chiefyang
+ * date:2016/5/19
+ * 参数：
+ * return:
+ */
 function index(){
     $postData   =   array();
     $postData['service']   =   'cjt_create_instant_trade';
     $postData['version']   =   '1.0';
-    $postData['partner_id']=   1111111111;  //合作者id
+    $postData['partner_id']=   200000200071;  //合作者id  该id为测试环境id
     $postData['_input_charset']=   'UTF-8';
     $postData['sign_type']  =   'RSA'; //签名类型
     $postData['return_url'] =   "http://www.test.com/Notify/chanpay_fnotify";  //前端回调地址
@@ -20,7 +30,7 @@ function index(){
     $postData['is_anonymous']   =   'Y';
     $postData['sign']=   rsaSign($postData);
     $query  =   http_build_query($postData);
-    $url     = 'http://www.test.com'.$query;
+    $url     = 'https://tpay.chanpay.com/mag/gateway/receiveOrder.do?'.$query;  //该url为测试环境url
     header('Location: '.$url);
 }
 /*
@@ -50,7 +60,16 @@ function notify($params) {
     }
 }
 /**
- * 签名字符串
+ * 功能： 签名
+ * 官方说明： http://dev.chanpay.com/doku.php/sdwg:%E6%94%B6%E5%8D%95%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3#%E6%95%B0%E6%8D%AE%E
+ 4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E
+ **************************************************************
+ * author:chiefyang
+ * date:2016/5/19
+ * 参数：
+ * $args 签名字符串数组
+ * return:
+ */
  * return 签名结果
  */
 function rsaSign($args) {
@@ -79,10 +98,16 @@ function rsaSign($args) {
     return $sign;
 }
 /**
- * 验证签名
+ * 功能： 验证签名
+ * 官方说明： http://dev.chanpay.com/doku.php/sdwg:%E6%94%B6%E5%8D%95%E7%BD%91%E5%85%B3%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3#%E6%95%B0%E6%8D%AE%E
+ 4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B%E8%AF%B4%E6%98%8E
+ **************************************************************
+ * author:chiefyang
+ * date:2016/5/19
+ * 参数：
  * @param $args 需要签名的数组
  * @param $sign 签名结果
- * return 签名结果
+ * return 验证是否成功
  */
 function rsaVerify($args, $sign) {
     $args=array_filter($args);//过滤掉空值
