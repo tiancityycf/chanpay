@@ -89,8 +89,8 @@ function rsaSign($args) {
     //$query=http_build_query($args);
 
     $path   =   "./rsa_private_key.pem";  //私钥地址 
-    $public_key= file_get_contents($path);
-    $pkeyid = openssl_get_privatekey($public_key);
+    $private_key= file_get_contents($path);
+    $pkeyid = openssl_get_privatekey($private_key);
     openssl_sign($query, $sign, $pkeyid);
     openssl_free_key($pkeyid);
     $sign = base64_encode($sign);
